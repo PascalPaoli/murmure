@@ -1,4 +1,4 @@
-# Murmure (PascalPaoli Community Edition)
+# Murmure² (PascalPaoli Community Edition)
 
 > 🌟 **PascalPaoli's Community Fork:** This is a modified, independent version of Murmure. It includes exclusive features not available in the upstream project:
 > 
