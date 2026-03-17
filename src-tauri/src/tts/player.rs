@@ -18,34 +18,32 @@ impl TtsPlayer {
         let (tx, rx) = channel::<PlayerCommand>();
 
         thread::spawn(move || {
-            let stream_handle = match rodio::OutputStreamBuilder::from_default_device() {
-                Ok(builder) => match builder.open_stream_or_fallback() {
-                    Ok(stream) => stream,
-                    Err(e) => {
-                        error!("Failed to open TTS audio stream: {}", e);
-                        return;
-                    }
-                },
+            let handle = match rodio::DeviceSinkBuilder::open_default_sink() {
+                Ok(h) => h,
                 Err(e) => {
-                    error!("Failed to get default audio device for TTS: {}", e);
+                    error!("Failed to open TTS audio stream: {}", e);
                     return;
                 }
             };
 
-            let mut sink = rodio::Sink::connect_new(stream_handle.mixer());
+            let mut player = rodio::Player::connect_new(&handle.mixer());
 
             while let Ok(cmd) = rx.recv() {
                 match cmd {
                     PlayerCommand::Play(samples) => {
-                        let source = SamplesBuffer::new(1, 24000, samples);
-                        sink.append(source);
+                        let source = SamplesBuffer::new(
+                            std::num::NonZeroU16::new(1).unwrap(), 
+                            std::num::NonZeroU32::new(24000).unwrap(), 
+                            samples
+                        );
+                        player.append(source);
                     }
                     PlayerCommand::Stop => {
-                        sink.stop();
-                        sink = rodio::Sink::connect_new(stream_handle.mixer());
+                        player.stop();
+                        player = rodio::Player::connect_new(&handle.mixer());
                     }
                     PlayerCommand::IsPlaying(reply_tx) => {
-                        let is_playing = !sink.empty();
+                        let is_playing = !player.empty();
                         let _ = reply_tx.send(is_playing);
                     }
                 }
