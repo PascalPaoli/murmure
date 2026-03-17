@@ -75,14 +75,14 @@ pub async fn neural_speak(app: AppHandle, text: String) -> Result<(), String> {
         .collect();
 
     for sentence in sentences {
-        // Check if a new generation has started
+        // Check if a new generation has started or if it was stopped
         if state
             .generation_id
             .load(std::sync::atomic::Ordering::SeqCst)
             != my_gen_id
         {
             debug!("Generation {} cancelled, stopping synthesis.", my_gen_id);
-            return Ok(());
+            break;
         }
 
         let trimmed = sentence.trim();
@@ -93,6 +93,16 @@ pub async fn neural_speak(app: AppHandle, text: String) -> Result<(), String> {
         debug!("Synthesizing chunk: \"{}\"", trimmed);
         match engine.generate_audio(trimmed, lang_code, voice, speed) {
             Ok(samples) => {
+                // Secondary check right before playing out
+                if state
+                    .generation_id
+                    .load(std::sync::atomic::Ordering::SeqCst)
+                    != my_gen_id
+                {
+                    debug!("Generation {} cancelled during chunk synthesis. Halting.", my_gen_id);
+                    break;
+                }
+
                 if !samples.is_empty() {
                     state.player.play(samples);
                 }
