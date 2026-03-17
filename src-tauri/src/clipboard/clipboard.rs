@@ -121,10 +121,12 @@ pub fn get_selected_text(app_handle: &tauri::AppHandle) -> Result<String, String
         "Previous clipboard content length: {}",
         original_content.len()
     );
-
-    // Write a unique marker to detect if copy actually did something
-    let marker = "__MURMURE_EMPTY_MARKER__";
-    let _ = clipboard.write_text(marker);
+    // Clear clipboard before sending Ctrl+C to detect selection reliably.
+    // Without this, if the selected text is identical to the current clipboard
+    // content, we cannot distinguish "text was copied" from "nothing was selected".
+    clipboard
+        .write_text("")
+        .map_err(|e| format!("Failed to clear clipboard: {}", e))?;
 
     // Give the OS a tiny moment to register the clipboard change
     std::thread::sleep(std::time::Duration::from_millis(50));
@@ -132,21 +134,22 @@ pub fn get_selected_text(app_handle: &tauri::AppHandle) -> Result<String, String
     // Simulate Ctrl+C
     send_copy()?;
 
-    // Wait for the OS to process the copy event and update the clipboard
     std::thread::sleep(std::time::Duration::from_millis(200));
 
-    let copied_content = clipboard.read_text().unwrap_or_default();
+    let selected_text = clipboard.read_text().unwrap_or_default();
+    debug!("Selected text length: {}", selected_text.len());
 
-    // Restore original clipboard
-    let _ = clipboard.write_text(&original_content);
+    // Restore original clipboard content in all cases
+    clipboard
+        .write_text(&original_content)
+        .map_err(|e| format!("Failed to restore clipboard in get_selected_text: {}", e))?;
+    debug!("Restored original clipboard content");
 
-    if copied_content == marker {
-        // Nothing was actually copied (no selection)
-        debug!("No text was selected (clipboard still has marker).");
-        Ok(String::new())
+    if !selected_text.is_empty() {
+        Ok(selected_text)
     } else {
-        debug!("Selected text length: {}", copied_content.len());
-        Ok(copied_content)
+        debug!("No text was selected");
+        Ok(String::new())
     }
 }
 

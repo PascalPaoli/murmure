@@ -41,3 +41,4 @@ _bmad
 _bmad-output
 
 resources/tts/*.onnx
+src-tauri/resources/tts/*.onnx

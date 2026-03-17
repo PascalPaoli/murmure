@@ -58,22 +58,10 @@ pub fn get_mic_list() -> Result<Vec<crate::audio::types::MicInfo>, String> {
 }
 
 #[command]
-pub fn get_sound_enabled(app: AppHandle) -> Result<bool, String> {
-    let s = crate::settings::load_settings(&app);
-    Ok(s.sound_enabled)
-}
-
-#[command]
 pub fn set_sound_enabled(app: AppHandle, enabled: bool) -> Result<(), String> {
     let mut s = crate::settings::load_settings(&app);
     s.sound_enabled = enabled;
     crate::settings::save_settings(&app, &s)
-}
-
-#[command]
-pub fn get_log_level(app: AppHandle) -> Result<String, String> {
-    let s = crate::settings::load_settings(&app);
-    Ok(s.log_level)
 }
 
 #[command]
@@ -117,5 +105,12 @@ pub fn get_tts_voice(app: AppHandle) -> Result<String, String> {
 pub fn set_tts_voice(app: AppHandle, voice: String) -> Result<(), String> {
     let mut s = crate::settings::load_settings(&app);
     s.tts_voice = voice;
+    crate::settings::save_settings(&app, &s)
+}
+
+#[command]
+pub fn set_show_in_dock(app: AppHandle, show: bool) -> Result<(), String> {
+    let mut s = crate::settings::load_settings(&app);
+    s.show_in_dock = show;
     crate::settings::save_settings(&app, &s)
 }

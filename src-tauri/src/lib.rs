@@ -152,6 +152,17 @@ pub fn run() {
 
             let mut s = settings::load_settings(app.handle());
 
+            #[cfg(target_os = "macos")]
+            {
+                use tauri::ActivationPolicy;
+                let policy = if s.show_in_dock {
+                    ActivationPolicy::Regular
+                } else {
+                    ActivationPolicy::Accessory
+                };
+                app.set_activation_policy(policy);
+            }
+
             if let Ok(level) = log::LevelFilter::from_str(&s.log_level) {
                 log::set_max_level(level);
             }
@@ -223,6 +234,7 @@ pub fn run() {
             read_murmure_file,
             write_murmure_file,
             get_all_settings,
+            set_show_in_dock,
             get_dictionary_with_languages,
             get_recent_transcriptions,
             clear_history,
@@ -258,9 +270,7 @@ pub fn run() {
             set_llm_mode_3_shortcut,
             get_llm_mode_4_shortcut,
             set_llm_mode_4_shortcut,
-            get_overlay_mode,
             set_overlay_mode,
-            get_overlay_position,
             set_overlay_position,
             suspend_transcription,
             resume_transcription,
@@ -270,12 +280,9 @@ pub fn run() {
             set_api_port,
             start_http_api_server,
             stop_http_api_server,
-            get_copy_to_clipboard,
             set_copy_to_clipboard,
-            get_paste_method,
             set_paste_method,
             get_usage_stats,
-            get_persist_history,
             set_persist_history,
             delete_history_item,
             get_history_limit,
@@ -301,14 +308,11 @@ pub fn run() {
             store_remote_api_key,
             has_remote_api_key,
             get_remote_api_key_masked,
-            get_sound_enabled,
             set_sound_enabled,
-            get_record_mode,
             set_record_mode,
             get_formatting_settings,
             set_formatting_settings,
             validate_regex,
-            get_log_level,
             set_log_level,
             open_accessibility_settings,
             check_accessibility_permission,
