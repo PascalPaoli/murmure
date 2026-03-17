@@ -1,4 +1,14 @@
-# Murmure
+# Murmure (PascalPaoli Community Edition)
+
+> 🌟 **PascalPaoli's Community Fork:** This is a modified, independent version of Murmure. It includes exclusive features not available in the upstream project:
+> 
+> ***Murmure was listening to you, now it also speaks to you. Dictate or listen to whatever you want, wherever you want.***
+> 
+> - **Local AI Text-To-Speech (TTS):** Generates voice replies instantly using the local Kokoro engine, seamlessly running on Windows 11. 
+> - **Auto Language Detection:** Automatically switches between English and French voices depending on the transcribed text.
+> - **Engine Choice:** Choose freely between the high-quality Neural TTS (Kokoro) or your default Windows System OS voices.
+> - **Audio Exports:** Download any past transcription as a `.wav` file to a custom folder of your choosing.
+> - **Enhanced Privacy:** Hard-delete specific transcriptions from your history or set the retention limit to 0 for a fully ephemeral experience.
 
 A privacy-first, open-source speech-to-text application that runs entirely on your machine, powered by a neural network via NVIDIA’s [Parakeet TDT 0.6B v3 model](https://huggingface.co/nvidia/parakeet-tdt-0.6b-v3) for fast, local transcription. Murmure turns your voice into text with no internet connection and zero data collection, and supports 25 European languages.
 
