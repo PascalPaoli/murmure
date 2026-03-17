@@ -96,7 +96,7 @@ export const HistoryItem: React.FC<HistoryItemProps> = ({ entry, onDelete }) => 
                     <Typography.Paragraph className="text-[10px] text-muted-foreground">
                         {formatTime(entry.timestamp)}
                     </Typography.Paragraph>
-                    <Wrench className={`w-3.5 h-3.5 text-muted-foreground transition-opacity ${isSpeaking ? 'opacity-0' : 'group-hover:opacity-0'}`} />
+                    <Wrench className={`w-3.5 h-3.5 text-muted-foreground transition-opacity duration-100 ${isSpeaking ? 'opacity-0' : 'group-hover:opacity-0'}`} />
                 </div>
 
                 <div className="pr-16">
@@ -111,8 +111,10 @@ export const HistoryItem: React.FC<HistoryItemProps> = ({ entry, onDelete }) => 
             </button>
             
             <div 
-                className={`absolute top-2 right-2 flex items-center gap-1 bg-background/90 backdrop-blur-sm rounded-md p-1 border border-border shadow-sm transition-opacity ${
-                    isSpeaking ? 'opacity-100' : 'opacity-0 group-hover:opacity-100 focus-within:opacity-100'
+                className={`absolute top-2 right-2 flex items-center gap-1 bg-background/90 backdrop-blur-sm rounded-md p-1 border border-border shadow-sm transition-all duration-100 ${
+                    isSpeaking 
+                        ? 'opacity-100 scale-100 pointer-events-auto' 
+                        : 'opacity-0 scale-95 group-hover:opacity-100 group-hover:scale-100 group-hover:pointer-events-auto pointer-events-none focus-within:opacity-100 focus-within:scale-100 focus-within:pointer-events-auto'
                 }`}
             >
                 <Button
