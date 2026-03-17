@@ -92,16 +92,17 @@ export const HistoryItem: React.FC<HistoryItemProps> = ({ entry, onDelete }) => 
                 className="w-full text-left rounded-md border border-border p-3 hover:bg-accent cursor-pointer transition-colors"
                 onClick={handleCopy}
             >
-                <div className="flex items-baseline gap-2 pr-24">
+                <Typography.Paragraph className="absolute top-3 right-3 text-[10px] text-muted-foreground opacity-60">
+                    {formatTime(entry.timestamp)}
+                </Typography.Paragraph>
+
+                <div className="pr-16">
                     <Typography.Paragraph className="break-words">
                         {entry.text === '' ? (
                             <span className="italic text-xs text-muted-foreground">{t('(Empty transcription)')}</span>
                         ) : (
                             entry.text
                         )}
-                    </Typography.Paragraph>
-                    <Typography.Paragraph className="text-[10px] text-muted-foreground shrink-0 whitespace-nowrap opacity-60">
-                        {formatTime(entry.timestamp)}
                     </Typography.Paragraph>
                 </div>
             </button>
