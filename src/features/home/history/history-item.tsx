@@ -1,7 +1,7 @@
 import React from 'react';
 import { Typography } from '@/components/typography';
 import { Button } from '@/components/button';
-import { Volume2, Square, Download, Trash2 } from 'lucide-react';
+import { Volume2, Square, Download, Trash2, Wrench } from 'lucide-react';
 import { toast } from 'react-toastify';
 import { useTranslation } from '@/i18n';
 import { HistoryEntry } from './hooks/use-history-state';
@@ -92,9 +92,12 @@ export const HistoryItem: React.FC<HistoryItemProps> = ({ entry, onDelete }) => 
                 className="w-full text-left rounded-md border border-border p-3 hover:bg-accent cursor-pointer transition-colors"
                 onClick={handleCopy}
             >
-                <Typography.Paragraph className="absolute top-3 right-3 text-[10px] text-muted-foreground opacity-60">
-                    {formatTime(entry.timestamp)}
-                </Typography.Paragraph>
+                <div className="absolute top-3 right-3 flex items-center gap-1.5 opacity-60">
+                    <Typography.Paragraph className="text-[10px] text-muted-foreground">
+                        {formatTime(entry.timestamp)}
+                    </Typography.Paragraph>
+                    <Wrench className={`w-3.5 h-3.5 text-muted-foreground transition-opacity ${isSpeaking ? 'opacity-0' : 'group-hover:opacity-0'}`} />
+                </div>
 
                 <div className="pr-16">
                     <Typography.Paragraph className="break-words">
