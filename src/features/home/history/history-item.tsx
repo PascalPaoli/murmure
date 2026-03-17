@@ -111,7 +111,7 @@ export const HistoryItem: React.FC<HistoryItemProps> = ({ entry, onDelete }) => 
             </button>
             
             <div 
-                className="absolute top-2 right-2 flex items-center gap-1 bg-background/90 backdrop-blur-sm rounded-md p-1 border border-border shadow-sm transition-all duration-100 opacity-0 scale-95 group-hover:opacity-100 group-hover:scale-100 group-hover:pointer-events-auto pointer-events-none focus-within:opacity-100 focus-within:scale-100 focus-within:pointer-events-auto"
+                className="absolute top-2 right-2 flex items-center gap-1 bg-background/90 backdrop-blur-sm rounded-md p-1 border border-border shadow-sm transition-all duration-100 opacity-0 scale-95 group-hover:opacity-100 group-hover:scale-100 group-hover:pointer-events-auto pointer-events-none"
             >
                 <Button
                     variant="ghost"
